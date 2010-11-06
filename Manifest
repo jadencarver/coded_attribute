@@ -5,7 +5,7 @@ Rakefile
 coded_attribute.gemspec
 init.rb
 install.rb
-lib/coded_attributes.rb
+lib/coded_attribute.rb
 rdoc/CodedAttributes.html
 rdoc/README.html
 rdoc/created.rid

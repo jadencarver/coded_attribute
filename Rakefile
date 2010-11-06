@@ -9,7 +9,7 @@ task :default => :test
 
 Echoe.new('coded_attribute', '0.0.3') do |p|
   p.description = "ActiveRecord plugin for storing coded variables"
-  p.url = "http://github.com/windigo77/coded_attribute"
+  p.url = "http://github.com/windigo/coded_attribute"
   p.author = "Jaden Carver"
   p.email = "jaden.carver@gmail.com"
   p.ignore_pattern = ["tmp/*", "script/*"]
