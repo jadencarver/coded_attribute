@@ -18,18 +18,15 @@ module CodedAttributes
       codes = attribute_or_codes.inject({}) { |h, v| h.merge! h.keys.count => v }
     end
 
-    class_variable_set(:"@@#{method}_codes", codes)
-    define_method(:"#{method}_codes") do
-      class_variable_get("@@#{method}_codes")
+    class_variable_set :"@@#{method}_codes", codes
+    cattr_reader :"#{method}_codes"
+
+    define_method :"#{method}" do
+      self.class.class_variable_get("@@#{method}_codes")[read_attribute(attribute)]
     end
 
-    class_eval do
-      define_method :"#{method}" do
-        self.class.class_variable_get("@@#{method}_codes")[read_attribute(attribute)]
-      end
-      define_method :"#{method}=" do |value|
-        write_attribute(attribute, self.class.class_variable_get("@@#{method}_codes").key(value.to_sym))
-      end
-    end # class_eval
+    define_method :"#{method}=" do |value|
+      write_attribute(attribute, self.class.class_variable_get("@@#{method}_codes").key(value.to_sym))
+    end
   end # def coded
 end # module CodedAttributes
