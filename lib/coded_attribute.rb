@@ -1,6 +1,6 @@
 # CodedAttributes
 
-module CodedAttributes
+module CodedAttribute
   VERSION = 0.1
 
   def coded_attribute(method, *attribute_or_codes)

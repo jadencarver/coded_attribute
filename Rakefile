@@ -7,7 +7,7 @@ require 'rake/rdoctask'
 desc 'Default: run unit tests.'
 task :default => :test
 
-Echoe.new('coded_attribute', '0.0.2') do |p|
+Echoe.new('coded_attribute', '0.0.3') do |p|
   p.description = "ActiveRecord plugin for storing coded variables"
   p.url = "http://github.com/windigo77/coded_attribute"
   p.author = "Jaden Carver"

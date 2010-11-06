@@ -1,5 +1,5 @@
-require 'coded_attributes'
+require 'coded_attribute'
 
 class ActiveRecord::Base
-  extend CodedAttributes
+  extend CodedAttribute
 end
