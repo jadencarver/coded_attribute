@@ -1,6 +1,8 @@
 # CodedAttributes
 
 module CodedAttributes
+  VERSION = 0.1
+
   def coded_attribute(method, *attribute_or_codes)
     if [String,Symbol].include?(attribute_or_codes.first.class)
       attribute = attribute_or_codes.shift

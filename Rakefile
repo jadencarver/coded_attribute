@@ -1,9 +1,20 @@
+require 'rubygems'
 require 'rake'
+require 'echoe'
 require 'rake/testtask'
 require 'rake/rdoctask'
 
 desc 'Default: run unit tests.'
 task :default => :test
+
+Echoe.new('coded_attribute', '0.0.2') do |p|
+  p.description = "ActiveRecord plugin for storing coded variables"
+  p.url = "http://github.com/windigo77/coded_attribute"
+  p.author = "Jaden Carver"
+  p.email = "jaden.carver@gmail.com"
+  p.ignore_pattern = ["tmp/*", "script/*"]
+  p.development_dependencies = []
+end
 
 desc 'Test the coded_attributes plugin.'
 Rake::TestTask.new(:test) do |t|
