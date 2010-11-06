@@ -1,33 +1,34 @@
 # CodedAttributes
 
 module CodedAttributes
-  def coded_attribute(method, *attribute_or_values)
-    if attribute_or_values.class == Array && attribute_or_values.count == 2 && attribute_or_values.last.class == Hash
-      attribute = attribute_or_values.first.to_sym
-      values = attribute_or_values.last
-    elsif attribute_or_values.class == Array && attribute_or_values.count == 2 && attribute_or_values.last.class == Array
-      attribute = attribute_or_values.first.to_sym
-      values = attribute_or_values.last.inject({}) { |h, v| h.merge! h.keys.count => v }
-    elsif attribute_or_values.class == Hash
-      attribute = :"#{method}_code"
-      values = attribute_or_values
-    elsif attribute_or_values.class == Array
-      attribute = :"#{method}_code"
-      values = attribute_or_values.inject({}) { |h, v| h.merge! h.keys.count => v }
+  def coded_attribute(method, *attribute_or_codes)
+    if [String,Symbol].include?(attribute_or_codes.first.class)
+      attribute = attribute_or_codes.shift
     else
-      raise ArgumentError
+      attribute = :"#{method}_code"
+    end
+
+    if attribute_or_codes.first.class == Hash
+      codes = attribute_or_codes.shift
+      raise ArgumentError, "Too many arguments" unless attribute_or_codes.blank?
+    elsif attribute_or_codes.first.class == Array
+      codes = attribute_or_codes.shift.inject({}) { |h, v| h.merge! h.keys.count => v }
+      raise ArgumentError, "Too many arguments" unless attribute_or_codes.blank?
+    else
+      codes = attribute_or_codes.inject({}) { |h, v| h.merge! h.keys.count => v }
+    end
+
+    class_variable_set(:"@@#{method}_codes", codes)
+    define_method(:"#{method}_codes") do
+      class_variable_get("@@#{method}_codes")
     end
 
     class_eval do
-      instance_variable_set("@#{method}_values", values)
       define_method :"#{method}" do
-        instance_variable_get("@#{method}_values")[read_attribute(attribute)]
+        self.class.class_variable_get("@@#{method}_codes")[read_attribute(attribute)]
       end
       define_method :"#{method}=" do |value|
-        write_attribute(attribute, instance_variable_get("@#{method}_values").index(value.to_sym))
-      end
-      define_method :"#{method}_values" do
-        instance_variable_get("@#{method}_values")
+        write_attribute(attribute, self.class.class_variable_get("@@#{method}_codes").key(value.to_sym))
       end
     end # class_eval
   end # def coded
