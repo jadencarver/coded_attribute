@@ -1,1 +1,5 @@
-# Include hook code here
+require 'coded_attributes'
+
+class ActiveRecord::Base
+  extend CodedAttributes
+end
