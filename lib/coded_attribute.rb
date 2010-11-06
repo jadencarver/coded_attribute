@@ -1,23 +1,19 @@
 # CodedAttributes
 
 module CodedAttribute
-  VERSION = 0.1
+  def coded_attribute_set(method, *attributes_and_codes)
+  end
 
-  def coded_attribute(method, *attribute_or_codes)
-    if [String,Symbol].include?(attribute_or_codes.first.class)
-      attribute = attribute_or_codes.shift
-    else
-      attribute = :"#{method}_code"
-    end
+  def coded_attribute(method, *attributes_and_codes)
 
-    if attribute_or_codes.first.class == Hash
-      codes = attribute_or_codes.shift
-      raise ArgumentError, "Too many arguments" unless attribute_or_codes.blank?
-    elsif attribute_or_codes.first.class == Array
-      codes = attribute_or_codes.shift.inject({}) { |h, v| h.merge! h.keys.count => v }
-      raise ArgumentError, "Too many arguments" unless attribute_or_codes.blank?
-    else
-      codes = attribute_or_codes.inject({}) { |h, v| h.merge! h.keys.count => v }
+    if attributes_and_codes.last.class == Hash
+      codes = attributes_and_codes.pop
+    elsif attributes_and_codes.last.class == Array
+      if columns_hash[method].sql_type =~ /^(ENUM|SET)\(.*\)$/
+        codes = attributes_and_codes.pop.inject({}) { |h, v| h.merge! v.to_s => v.to_sym }
+      else
+        codes = attributes_and_codes.pop.inject({}) { |h, v| h.merge! h.keys.count => v }
+      end
     end
 
     class_variable_set :"@@#{method}_codes", codes
