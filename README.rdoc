@@ -74,9 +74,9 @@ name the column in your database 'color_code', you can replace :color, with a
 If you do not want to use a SET datatype, coded_attribute_set an make use of an
 integer bitmask to store the values.
 
-class Car < ActiveRecord::Base
-  coded_attribute_set :color, [ :red, :orange, :yellow, :green, :blue, :indigo, :violet ]
-end
+  class Car < ActiveRecord::Base
+    coded_attribute_set :color, [ :red, :orange, :yellow, :green, :blue, :indigo, :violet ]
+  end
 
 =Planned Features
 
