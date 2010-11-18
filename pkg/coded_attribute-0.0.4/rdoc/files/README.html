@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: README</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>README</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>README
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Mon Nov 08 11:37:25 -0700 2010</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1><a href="../classes/CodedAttribute.html">CodedAttribute</a></h1>
+<p>
+Two of my favorite MySQL datatypes are ENUMs and SETs. Unfortunately,
+ActiveRecord doesn&#8216;t appear to support these fields well, or provide
+a good and simple alternative to the problem of coded values. In the past,
+I used to write getters and setters that looked something like this to
+solve my problem.
+</p>
+<pre>
+  class Article
+    STATUS_CODES =&gt; {
+        :deleted =&gt; 0, 0 =&gt; :deleted
+        :pending =&gt; 1, 1 =&gt; :pending,
+      :completed =&gt; 2, 2 =&gt; :completed,
+      :published =&gt; 3, 3 =&gt; :published
+    }
+
+    def status=(value)
+      value = value.to_sym if value.is_a?(String)
+      status_code = STATUS_CODES[value]
+    end
+
+    def status
+      STATUS_CODES[status_code]
+    end
+  end
+</pre>
+<p>
+Doesn&#8216;t that code look horrible? Wouldn&#8216;t it be better if it
+looked like this?!
+</p>
+<pre>
+  class Article
+    coded_attribute :status {
+      0 =&gt; :deleted
+      1 =&gt; :pending
+      2 =&gt; :completed
+      3 =&gt; :published
+    end
+  end
+</pre>
+<p>
+Or, if we want to get even lazier!
+</p>
+<pre>
+  class MyClass
+    coded_attribute :status, [ :deleted, :active, :pending, :deleted ]
+  end
+</pre>
+<p>
+If so, then you&#8216;ve come to the right place.
+</p>
+<p>
+This plugin makes doing all of the above super easy. And your code (and
+other programmers) will love you for using it! Like seriously love you!
+</p>
+<h2>Coded Attributes</h2>
+<p>
+Lets get down to it. Suppose we have a car, and it can be any one of a
+variety of colors. We can indicate this in the model with the following
+code:
+</p>
+<pre>
+  class Car &lt; ActiveRecord::Base
+    coded_attribute :color, [ :red, :orange, :yellow, :green, :blue, :indigo, :violet ]
+  end
+</pre>
+<p>
+But we aren&#8216;t finished just yet. We still need to create a column to
+store our attribute data in. There are two ways to go about this.
+</p>
+<h3>Storing the Coded Value</h3>
+<p>
+The easiest way to store the coded value is to create an integer column in
+the database by appending &#8216;_code&#8217; to the name of the attribute.
+So in our &#8216;cars&#8217; table, we could create a
+&#8216;color_code&#8217; integer field. If you do not want to name the
+column in your database &#8216;color_code&#8217;, you can replace :color,
+with a :method =&gt; :column pair, for example:
+</p>
+<pre>
+  class Car &lt; ActiveRecord::Base
+    coded_attribute :color =&gt; :color_id, [ :red, orange, :yellow, :green, :blue, :indigo, :violet ]
+  end
+</pre>
+<h2>Coded Attribute Sets</h2>
+<p>
+If you do not want to use a SET datatype, coded_attribute_set an make use
+of an integer bitmask to store the values.
+</p>
+<pre>
+  class Car &lt; ActiveRecord::Base
+    coded_attribute_set :color, [ :red, :orange, :yellow, :green, :blue, :indigo, :violet ]
+  end
+</pre>
+<h1>Planned Features</h1>
+<p>
+Future versions should hopefully support auto-detecting and setup of enum
+and set types (so you don&#8216;t need to even define the coded_attribute,
+it will be done automatically on all classes).
+</p>
+<p>
+I also plan on a method added to Migrations that allow you to easily recode
+data
+</p>
+<p>
+Copyright (c) 2010 Jaden Carver, released under the MIT license
+</p>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>
