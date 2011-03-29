@@ -33,3 +33,7 @@ module CodedAttribute
   end
 
 end
+
+class ActiveRecord::Base
+  extend CodedAttribute
+end
